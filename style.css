@@ -7,5 +7,33 @@ body {
   color: #222;
   background: #fafafa;
 }
-header p, footer { color: #666; }
+a { color: inherit; }
+header h1 a { text-decoration: none; }
+header p, footer, .meta, .count { color: #666; }
+.meta, .count { font-size: 0.9rem; margin-left: 0.4rem; }
+.gym { margin-top: 2.5rem; }
+.gym h2 { margin-bottom: 0; }
+.gym > .meta { margin: 0 0 0.75rem; }
+.wall { border-top: 1px solid #ddd; padding: 0.6rem 0; }
+.wall summary { cursor: pointer; font-weight: 600; }
+.routes { list-style: none; padding: 0; margin: 0.5rem 0 0; }
+.route { padding: 0.5rem 0; border-top: 1px dashed #e5e5e5; }
+.route:first-child { border-top: 0; }
+.route img { display: block; max-width: 100%; margin-top: 0.4rem; border-radius: 6px; }
+.notes { margin: 0.2rem 0 0; }
+.dot {
+  display: inline-block; width: 0.8rem; height: 0.8rem; border-radius: 50%;
+  margin-right: 0.3rem; vertical-align: -0.05rem; border: 1px solid #0003; background: #ccc;
+}
+.color-red { background: #d33; }
+.color-orange { background: #f80; }
+.color-yellow { background: #fd0; }
+.color-green { background: #2a2; }
+.color-blue { background: #26d; }
+.color-purple { background: #84c; }
+.color-pink { background: #f6b; }
+.color-black { background: #111; }
+.color-white { background: #fff; }
+.color-grey { background: #999; }
+.color-brown { background: #852; }
 footer { margin-top: 3rem; font-size: 0.9rem; }

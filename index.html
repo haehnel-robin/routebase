@@ -1,26 +1,48 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Routebase</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <header>
-    <h1>Routebase</h1>
-    <p>An archive of bouldering problems from local gyms.</p>
-  </header>
+---
+layout: default
+---
+{% assign gyms = site.data.gyms %}
+{% if gyms == nil or gyms.size == 0 %}
+  <p>No gyms yet.</p>
+{% endif %}
 
-  <main>
-    <h2>Gyms</h2>
-    <ul>
-      <li>Example Gym (coming soon)</li>
-    </ul>
-  </main>
+{% for gym_entry in gyms %}
+  {% assign gym = gym_entry[1] %}
+  <section class="gym">
+    <h2>{{ gym.name }}</h2>
+    {% if gym.city %}<p class="meta">{{ gym.city }}</p>{% endif %}
 
-  <footer>
-    <p>Made by Robin.</p>
-  </footer>
-</body>
-</html>
+    {% assign wall_count = 0 %}
+    {% for wall_entry in site.data.walls %}
+      {% assign wall = wall_entry[1] %}
+      {% if wall.gym == gym.name %}
+        {% assign wall_count = wall_count | plus: 1 %}
+        {% assign wall_file = wall_entry[0] | append: ".yml" %}
+        <details class="wall">
+          {% assign route_count = 0 %}
+          {% for route_entry in site.data.routes %}
+            {% if route_entry[1].wall == wall_file %}{% assign route_count = route_count | plus: 1 %}{% endif %}
+          {% endfor %}
+          <summary>{{ wall.name }} <span class="count">{{ route_count }} route{% if route_count != 1 %}s{% endif %}</span></summary>
+          <ul class="routes">
+            {% for route_entry in site.data.routes %}
+              {% assign route = route_entry[1] %}
+              {% if route.wall == wall_file %}
+                <li class="route">
+                  <span class="dot color-{{ route.color | downcase }}" title="{{ route.color }}"></span>
+                  <strong>{{ route.grade }}</strong> · {{ route.color }}
+                  {% if route.date %}<span class="meta">{{ route.date }}</span>{% endif %}
+                  {% if route.notes %}<p class="notes">{{ route.notes }}</p>{% endif %}
+                  {% if route.image %}
+                    <a href="{{ route.image | relative_url }}"><img src="{{ route.image | relative_url }}" alt="{{ route.grade }} {{ route.color }} on {{ wall.name }}" loading="lazy"></a>
+                  {% endif %}
+                </li>
+              {% endif %}
+            {% endfor %}
+          </ul>
+        </details>
+      {% endif %}
+    {% endfor %}
+    {% if wall_count == 0 %}<p class="meta">No walls yet.</p>{% endif %}
+  </section>
+{% endfor %}

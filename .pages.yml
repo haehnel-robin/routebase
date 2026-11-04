@@ -1,0 +1,87 @@
+# Settings for Pages CMS (https://pagescms.org), the phone-friendly editor.
+media:
+  input: images
+  output: /images
+
+content:
+  - name: gyms
+    label: Gyms
+    type: collection
+    path: _data/gyms
+    format: yaml
+    filename: "{primary}.yml"
+    view:
+      fields: [name, city]
+    fields:
+      - name: name
+        label: Gym name
+        type: string
+        required: true
+      - name: city
+        label: City
+        type: string
+
+  - name: walls
+    label: Walls / Sections
+    type: collection
+    path: _data/walls
+    format: yaml
+    filename: "{fields.gym}-{primary}.yml"
+    view:
+      fields: [name, gym]
+    fields:
+      - name: name
+        label: Wall or section name
+        type: string
+        required: true
+      - name: gym
+        label: Gym
+        type: reference
+        required: true
+        options:
+          collection: gyms
+          search: name
+          value: "{fields.name}"
+          label: "{fields.name}"
+
+  - name: routes
+    label: Routes
+    type: collection
+    path: _data/routes
+    format: yaml
+    filename: "{year}-{month}-{day}-{hour}{minute}{second}.yml"
+    view:
+      fields: [grade, color, wall]
+    fields:
+      - name: wall
+        label: Wall
+        type: reference
+        required: true
+        options:
+          collection: walls
+          search: name
+          value: "{name}"
+          label: "{fields.gym} / {fields.name}"
+      - name: grade
+        label: Grade
+        type: select
+        required: true
+        options:
+          values: ["3", "4", "4+", "5", "5+", 6A, 6A+, 6B, 6B+, 6C, 6C+, 7A, 7A+, 7B, 7B+, 7C, 7C+, 8A, 8A+, 8B, 8B+, 8C]
+      - name: color
+        label: Hold color
+        type: select
+        required: true
+        options:
+          values: [Red, Orange, Yellow, Green, Blue, Purple, Pink, Black, White, Grey, Brown]
+      - name: image
+        label: Photo
+        type: image
+        options:
+          path: images/routes
+      - name: date
+        label: Date
+        type: date
+      - name: notes
+        label: Notes
+        type: text

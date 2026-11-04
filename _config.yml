@@ -1,0 +1,5 @@
+title: Routebase
+description: An archive of bouldering problems from local gyms.
+baseurl: /routebase
+exclude:
+  - README.md
