@@ -1,79 +1,41 @@
 # Settings for Pages CMS (https://pagescms.org), the phone-friendly editor.
+# Routes are sorted in folders: Routes / <Gym> / <Wall> / <route>.
 media:
   input: images
   output: /images
 
 content:
-  - name: gyms
-    label: Gyms
-    type: collection
-    path: _data/gyms
-    format: yaml
-    filename: "{primary}.yml"
-    view:
-      fields: [name, city]
-    fields:
-      - name: name
-        label: Gym name
-        type: string
-        required: true
-      - name: city
-        label: City
-        type: string
-
-  - name: walls
-    label: Walls / Sections
-    type: collection
-    path: _data/walls
-    format: yaml
-    filename: "{fields.gym}-{primary}.yml"
-    view:
-      fields: [name, gym]
-    fields:
-      - name: name
-        label: Wall or section name
-        type: string
-        required: true
-      - name: gym
-        label: Gym
-        type: reference
-        required: true
-        options:
-          collection: gyms
-          search: name
-          value: "{fields.name}"
-          label: "{fields.name}"
-
   - name: routes
     label: Routes
     type: collection
-    path: _data/routes
-    format: yaml
-    filename: "{year}-{month}-{day}-{hour}{minute}{second}.yml"
+    path: _routes
+    format: yaml-frontmatter
+    filename: "{year}-{month}-{day}-{hour}{minute}{second}.md"
+    subfolders: true
     view:
-      fields: [grade, color, wall]
+      foldersFirst: true
+      fields: [grade, colors, date]
+      default:
+        sort: date
+        order: desc
     fields:
-      - name: wall
-        label: Wall
-        type: reference
-        required: true
-        options:
-          collection: walls
-          search: name
-          value: "{name}"
-          label: "{fields.gym} / {fields.name}"
       - name: grade
         label: Grade
-        type: select
+        type: string
         required: true
-        options:
-          values: ["3", "4", "4+", "5", "5+", 6A, 6A+, 6B, 6B+, 6C, 6C+, 7A, 7A+, 7B, 7B+, 7C, 7C+, 8A, 8A+, 8B, 8B+, 8C]
-      - name: color
-        label: Hold color
+        description: Any grading style, e.g. 6A, V4 or "Yellow circuit 3".
+      - name: colors
+        label: Hold color(s)
         type: select
-        required: true
+        description: Pick one, or two for a dual-color route.
         options:
-          values: [Red, Orange, Yellow, Green, Blue, Purple, Pink, Black, White, Grey, Brown]
+          multiple: true
+          max: 2
+          values: [Red, Orange, Yellow, Green, Mint, Turquoise, Blue, Purple, Pink, Black, White, Grey, Brown, Beige]
+      - name: custom_color
+        label: Other color
+        type: string
+        description: Only if the color isn't in the list. A hex code like #ff8800, or two like #ff8800/#222222.
       - name: image
         label: Photo
         type: image

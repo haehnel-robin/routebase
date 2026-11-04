@@ -25,15 +25,4 @@ header p, footer, .meta, .count { color: #666; }
   display: inline-block; width: 0.8rem; height: 0.8rem; border-radius: 50%;
   margin-right: 0.3rem; vertical-align: -0.05rem; border: 1px solid #0003; background: #ccc;
 }
-.color-red { background: #d33; }
-.color-orange { background: #f80; }
-.color-yellow { background: #fd0; }
-.color-green { background: #2a2; }
-.color-blue { background: #26d; }
-.color-purple { background: #84c; }
-.color-pink { background: #f6b; }
-.color-black { background: #111; }
-.color-white { background: #fff; }
-.color-grey { background: #999; }
-.color-brown { background: #852; }
 footer { margin-top: 3rem; font-size: 0.9rem; }

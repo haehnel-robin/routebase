@@ -1,0 +1,16 @@
+# Common hold colors: the name shown in the editor, and the color used on the website.
+# To add a common color, add a line here AND to the list in .pages.yml.
+Red: "#d33"
+Orange: "#f80"
+Yellow: "#fd0"
+Green: "#2a2"
+Mint: "#7dd8b5"
+Turquoise: "#1bb"
+Blue: "#26d"
+Purple: "#84c"
+Pink: "#f6b"
+Black: "#111"
+White: "#fff"
+Grey: "#999"
+Brown: "#852"
+Beige: "#e8d8b0"

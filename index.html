@@ -1,48 +1,33 @@
 ---
 layout: default
 ---
-{% assign gyms = site.data.gyms %}
-{% if gyms == nil or gyms.size == 0 %}
-  <p>No gyms yet.</p>
-{% endif %}
+{%- comment -%}
+Routes live in _routes/<Gym>/<Wall>/<route>.md, so the folder names are the gym and wall.
+{%- endcomment -%}
+{% assign gyms = site.routes | group_by_exp: "r", "r.relative_path | split: '/' | slice: 1 | first" | sort: "name" %}
+{% if gyms.size == 0 %}<p>No routes yet.</p>{% endif %}
 
-{% for gym_entry in gyms %}
-  {% assign gym = gym_entry[1] %}
+{% for gym in gyms %}
   <section class="gym">
     <h2>{{ gym.name }}</h2>
-    {% if gym.city %}<p class="meta">{{ gym.city }}</p>{% endif %}
-
-    {% assign wall_count = 0 %}
-    {% for wall_entry in site.data.walls %}
-      {% assign wall = wall_entry[1] %}
-      {% if wall.gym == gym.name %}
-        {% assign wall_count = wall_count | plus: 1 %}
-        {% assign wall_file = wall_entry[0] | append: ".yml" %}
-        <details class="wall">
-          {% assign route_count = 0 %}
-          {% for route_entry in site.data.routes %}
-            {% if route_entry[1].wall == wall_file %}{% assign route_count = route_count | plus: 1 %}{% endif %}
-          {% endfor %}
-          <summary>{{ wall.name }} <span class="count">{{ route_count }} route{% if route_count != 1 %}s{% endif %}</span></summary>
-          <ul class="routes">
-            {% for route_entry in site.data.routes %}
-              {% assign route = route_entry[1] %}
-              {% if route.wall == wall_file %}
-                <li class="route">
-                  <span class="dot color-{{ route.color | downcase }}" title="{{ route.color }}"></span>
-                  <strong>{{ route.grade }}</strong> · {{ route.color }}
-                  {% if route.date %}<span class="meta">{{ route.date }}</span>{% endif %}
-                  {% if route.notes %}<p class="notes">{{ route.notes }}</p>{% endif %}
-                  {% if route.image %}
-                    <a href="{{ route.image | relative_url }}"><img src="{{ route.image | relative_url }}" alt="{{ route.grade }} {{ route.color }} on {{ wall.name }}" loading="lazy"></a>
-                  {% endif %}
-                </li>
+    {% assign walls = gym.items | group_by_exp: "r", "r.relative_path | split: '/' | slice: 2 | first" | sort: "name" %}
+    {% for wall in walls %}
+      <details class="wall">
+        <summary>{{ wall.name }} <span class="count">{{ wall.size }} route{% if wall.size != 1 %}s{% endif %}</span></summary>
+        <ul class="routes">
+          {% assign routes = wall.items | sort: "date" | reverse %}
+          {% for route in routes %}
+            <li class="route">
+              <strong>{{ route.grade }}</strong> · {% include dot.html route=route %}
+              {% if route.date %}<span class="meta">{{ route.date | date: "%Y-%m-%d" }}</span>{% endif %}
+              {% if route.notes %}<p class="notes">{{ route.notes }}</p>{% endif %}
+              {% if route.image %}
+                <a href="{{ route.image | relative_url }}"><img src="{{ route.image | relative_url }}" alt="{{ route.grade }} on {{ wall.name }}" loading="lazy"></a>
               {% endif %}
-            {% endfor %}
-          </ul>
-        </details>
-      {% endif %}
+            </li>
+          {% endfor %}
+        </ul>
+      </details>
     {% endfor %}
-    {% if wall_count == 0 %}<p class="meta">No walls yet.</p>{% endif %}
   </section>
 {% endfor %}

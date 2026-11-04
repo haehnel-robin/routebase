@@ -1,0 +1,16 @@
+{%- comment -%} Renders a color dot. Up to two colors become a split dot. {%- endcomment -%}
+{%- assign c1 = "" -%}{%- assign c2 = "" -%}{%- assign names = "" -%}
+{%- assign all = include.route.colors -%}
+{%- if include.route.custom_color and include.route.custom_color != "" -%}
+  {%- assign custom = include.route.custom_color | split: "/" -%}
+  {%- assign all = all | concat: custom -%}
+{%- endif -%}
+{%- for c in all limit: 2 -%}
+  {%- assign key = c | strip -%}
+  {%- assign hex = site.data.colors[key] -%}
+  {%- unless hex -%}{%- assign hex = key -%}{%- endunless -%}
+  {%- if forloop.first -%}{%- assign c1 = hex -%}{%- else -%}{%- assign c2 = hex -%}{%- endif -%}
+  {%- assign names = names | append: key -%}{%- unless forloop.last -%}{%- assign names = names | append: " / " -%}{%- endunless -%}
+{%- endfor -%}
+{%- if c2 == "" -%}{%- assign c2 = c1 -%}{%- endif -%}
+<span class="dot" style="background: linear-gradient(135deg, {{ c1 | default: '#ccc' }} 50%, {{ c2 | default: '#ccc' }} 50%)"></span>{{ names }}
